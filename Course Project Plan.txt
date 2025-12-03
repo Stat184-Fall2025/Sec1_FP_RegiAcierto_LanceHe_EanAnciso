@@ -1,0 +1,10 @@
+ Course Project Plan
+
+Goal: Convey all the knowledge gained through the course in our own EDA/Research product.
+
+Needs: 
+	- Create R project
+	- Create Code File
+	- Create Quarto Document
+	- Updated README file
+
