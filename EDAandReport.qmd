@@ -1,0 +1,34 @@
+---
+title: "EDA and Report"
+author: 
+  - "Ean Anciso"
+  - "Lance He"
+  - "Regi Acierto"
+format: pdf
+date: "Dec. 4, 2025"
+date-modified: now
+format: 
+  pdf:
+    toc: false
+    number-sections: true
+    number-depth: 4
+    fig-align: center
+    cap-location: top
+    geometry: 
+      - top=1in
+      - left=1in
+      - right=1in
+      - bottom=1in
+    colorlinks: true
+execute: 
+  echo: false
+  warning: false
+---
+
+
+{{< pagebreak >}}
+# Code Appendix
+
+```{r codeAppend, ref.label=knitr::all_labels(), echo=TRUE, eval=FALSE}
+
+```
