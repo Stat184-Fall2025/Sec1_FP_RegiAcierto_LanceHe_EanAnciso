@@ -1,4 +1,4 @@
- Course Project Plan
+Course Project Plan
 
 Goal: Convey all the knowledge gained through the course in our own EDA/Research product.
 
@@ -8,3 +8,15 @@ Needs:
 	- Create Quarto Document
 	- Updated README file
 
+Tidying/Wrangling Plan
+- Drop Metropolitan Area
+- Rename City Proper Columns and drop definitions 
+- Rename Urban Area Columns
+- Drop Rows with blank values
+- Drop Footnotes
+- Drop Commas
+
+Visualization Planning (Possibly Look at Total VS City Proper VS Urban Area)
+First - Table showing Country, Count, Total Pop
+Second - Segmented Bar Chart Showing Countries(Segmented by city)
+Third - Line Chart of Area vs Density, Each line is different country
