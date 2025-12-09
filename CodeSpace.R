@@ -18,10 +18,10 @@ city_table <- tables[[table_index]]
 # 2. Fix Column Names
 
 colnames(city_table) <- c(
-  "City", "Country", "UN_Estimate", "Definition",
-  "City_Pop", "City_Area", "City_Density",      # City Proper
-  "Urban_Pop", "Urban_Area", "Urban_Density",   # Urban Area
-  "Metro_Pop", "Metro_Area", "Metro_Density"    # Metropolitan
+  "City", "Country", "UN_Estimate_Pop", "Definition",
+  "City_Pop", "City_Area_km2", "City_Density_per_km2",      # City Proper
+  "Urban_Pop", "Urban_Area_km2", "Urban_Density_per_km2",   # Urban Area
+  "Metro_Pop", "Metro_Area_km2", "Metro_Density_per_km2"    # Metropolitan
 )
 
 # 3. Data Wrangling Pipeline
@@ -30,9 +30,9 @@ clean_data <- city_table %>%
   slice(-1) %>%
   
   select(
-    City, Country, UN_Estimate,
-    City_Pop, City_Area, City_Density,
-    Urban_Pop, Urban_Area, Urban_Density
+    City, Country, UN_Estimate_Pop,
+    City_Pop, City_Area_km2, City_Density_per_km2,
+    Urban_Pop, Urban_Area_km2, Urban_Density_per_km2
   ) %>%
   
   # Remove Footnotes and Commas ---
@@ -48,13 +48,11 @@ clean_data <- city_table %>%
   
 
   filter(
-    !is.na(City_Pop),
-    !is.na(City_Area),
-    !is.na(City_Density),
-    !is.na(Urban_Pop),
-    !is.na(Urban_Area),
-    !is.na(Urban_Density)
-  )
+    !is.na(City_Pop), !is.na(City_Area_km2), !is.na(City_Density_per_km2),
+    !is.na(Urban_Pop), !is.na(Urban_Area_km2), !is.na(Urban_Density_per_km2)
+  ) %>%
+  
+  mutate(across(3:9, as.numeric))
 
 # 4. View Result
 View(clean_data)
