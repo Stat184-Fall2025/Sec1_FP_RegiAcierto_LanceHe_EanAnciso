@@ -143,6 +143,28 @@ urban_area_stats <- country_data %>%
 
 View(urban_area_stats)
 
+# Table B: City Proper Statistics 
+city_proper_stats <- country_data %>%
+  group_by(Country) %>%
+  summarise(
+    # Population Stats
+    Pop_Min  = min(City_Pop, na.rm = TRUE),
+    Pop_Q1   = quantile(City_Pop, 0.25, na.rm = TRUE),
+    Pop_Mean = mean(City_Pop, na.rm = TRUE),
+    Pop_Q3   = quantile(City_Pop, 0.75, na.rm = TRUE),
+    Pop_Max  = max(City_Pop, na.rm = TRUE),
+    Pop_SD   = sd(City_Pop, na.rm = TRUE),
+    
+    # Area Stats
+    Area_Min  = min(City_Area_km2, na.rm = TRUE),
+    Area_Q1   = quantile(City_Area_km2, 0.25, na.rm = TRUE),
+    Area_Mean = mean(City_Area_km2, na.rm = TRUE),
+    Area_Q3   = quantile(City_Area_km2, 0.75, na.rm = TRUE),
+    Area_Max  = max(City_Area_km2, na.rm = TRUE),
+    Area_SD   = sd(City_Area_km2, na.rm = TRUE)
+  )
+
+
 # Line plot for urban population by area for top 6 cities
 urban_data <- clean_data %>%
   filter(
