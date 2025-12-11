@@ -5,6 +5,7 @@
 library(rvest)
 library(dplyr)
 library(stringr)
+library(tidyverse)
 
 # 1. Scrape the table
 url <- "https://en.wikipedia.org/wiki/List_of_largest_cities"
@@ -58,6 +59,8 @@ clean_data <- city_table %>%
 View(clean_data)
 
 
+# Line plot for city proper population by area for top 6 cities
+city_proper_data <- clean_data %>%
 library(ggplot2)
 ## First table
 firstTable <- clean_data %>%
@@ -138,11 +141,41 @@ urban_area_stats <- country_data %>%
 
 View(urban_area_stats)
 
+# Table B: City Proper Statistics 
+city_proper_stats <- country_data %>%
+  group_by(Country) %>%
+  summarise(
+    # Population Stats
+    Pop_Min  = min(City_Pop, na.rm = TRUE),
+    Pop_Q1   = quantile(City_Pop, 0.25, na.rm = TRUE),
+    Pop_Mean = mean(City_Pop, na.rm = TRUE),
+    Pop_Q3   = quantile(City_Pop, 0.75, na.rm = TRUE),
+    Pop_Max  = max(City_Pop, na.rm = TRUE),
+    Pop_SD   = sd(City_Pop, na.rm = TRUE),
+    
+    # Area Stats
+    Area_Min  = min(City_Area_km2, na.rm = TRUE),
+    Area_Q1   = quantile(City_Area_km2, 0.25, na.rm = TRUE),
+    Area_Mean = mean(City_Area_km2, na.rm = TRUE),
+    Area_Q3   = quantile(City_Area_km2, 0.75, na.rm = TRUE),
+    Area_Max  = max(City_Area_km2, na.rm = TRUE),
+    Area_SD   = sd(City_Area_km2, na.rm = TRUE)
+  )
+
+
+# Line plot for urban population by area for top 6 cities
 urban_data <- clean_data %>%
   filter(
     Country %in% c("United States", "China", "India", "Japan", "Brazil", "Indonesia")
   )
 
+View(city_proper_data)
+
+city_proper_data %>%
+  ggplot(
+    aes(
+      x = City_Area_km2,
+      y = City_Pop / 1000000,
 urban_data %>%
   ggplot(
     aes(
@@ -156,6 +189,36 @@ urban_data %>%
   geom_line() +
   scale_x_log10() +
   labs(
+    title = "City Proper Population by Area",
+    x = "City Proper Area (km²)",
+    y = "City Proper Population (Millions)"
+  )
+
+# Line plot for city proper population by area for top 6 cities
+city_proper_data <- clean_data %>%
+  filter(
+    Country %in% c("United States", "China", "India", "Japan", "Brazil", "Indonesia")
+  )
+
+View(city_proper_data)
+
+city_proper_data %>%
+  ggplot(
+    aes(
+      x = City_Area_km2,
+      y = City_Pop / 1000000,
+      color = Country,
+      group = Country
+    )
+  ) +
+  geom_point(alpha = 0.5) +
+  geom_line() +
+  scale_x_log10() +
+  labs(
+    title = "City Proper Population by Area",
+    x = "City Proper Area (km²)",
+    y = "City Proper Population (Millions)"
+  )
     title = "Urban Population by Area",
     x = "Urban Area (km²)",
     y = "Urban Population (Millions)"
