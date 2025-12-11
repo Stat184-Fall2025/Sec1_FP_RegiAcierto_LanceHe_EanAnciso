@@ -59,10 +59,8 @@ clean_data <- city_table %>%
 View(clean_data)
 
 
-<<<<<<< Updated upstream
 # Line plot for city proper population by area for top 6 cities
 city_proper_data <- clean_data %>%
-=======
 library(ggplot2)
 ## First table
 firstTable <- clean_data %>%
@@ -178,6 +176,11 @@ city_proper_data %>%
     aes(
       x = City_Area_km2,
       y = City_Pop / 1000000,
+urban_data %>%
+  ggplot(
+    aes(
+      x = Urban_Area_km2,
+      y = Urban_Pop / 1000000,
       color = Country,
       group = Country
     )
@@ -216,3 +219,8 @@ city_proper_data %>%
     x = "City Proper Area (km²)",
     y = "City Proper Population (Millions)"
   )
+    title = "Urban Population by Area",
+    x = "Urban Area (km²)",
+    y = "Urban Population (Millions)"
+  )
+
