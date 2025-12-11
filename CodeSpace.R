@@ -56,3 +56,108 @@ clean_data <- city_table %>%
 
 # 4. View Result
 View(clean_data)
+
+
+library(ggplot2)
+## First table
+firstTable <- clean_data %>%
+  group_by(Country) %>%
+  summarise(
+    entries = n(),
+    total_pop = sum(UN_Estimate_Pop, na.rm = TRUE),
+    total_city_pop = sum(City_Pop, na.rm = TRUE),
+    total_urban_pop = sum(Urban_Pop, na.rm = TRUE)
+  ) %>%
+  arrange(desc(entries))
+
+## Visual showing Density vs Area (Look at top 6 entries)
+
+Hentries <- clean_data %>%
+  filter(Country %in% c("China", "India", "United States", "Japan", "Brazil", "Indonesia"))
+
+### City Proper
+ggplot(
+  Hentries,
+  aes(
+    City_Area_km2, 
+    City_Density_per_km2, 
+    color = Country
+    ),
+  ) +
+  geom_point(size = 3) +
+  scale_x_log10() +
+  scale_y_log10() +
+  labs(title = "Area vs Density(City Proper): Top 6 Countries with most largest cities")
+
+### Urban Area
+ggplot(
+  Hentries,
+  aes(
+    Urban_Area_km2, 
+    Urban_Density_per_km2, 
+    color = Country
+  ),
+) +
+  geom_point(size = 3) +
+  scale_x_log10() +
+  scale_y_log10() +
+  labs(title = "Area vs Density(Urban Area): Top 6 Countries with most largest cities")
+
+
+
+
+# Filter for Target Countries
+target_countries <- c("China", "India", "United States")
+
+country_data <- clean_data %>%
+  mutate(Country = str_trim(Country)) %>% 
+  filter(Country %in% target_countries)
+
+# Create Summary Tables 
+
+# Table A: Urban Area Statistics 
+urban_area_stats <- country_data %>%
+  group_by(Country) %>%
+  summarise(
+    # Population Stats
+    Pop_Min  = min(Urban_Pop, na.rm = TRUE),
+    Pop_Q1   = quantile(Urban_Pop, 0.25, na.rm = TRUE),
+    Pop_Mean = mean(Urban_Pop, na.rm = TRUE),
+    Pop_Q3   = quantile(Urban_Pop, 0.75, na.rm = TRUE),
+    Pop_Max  = max(Urban_Pop, na.rm = TRUE),
+    Pop_SD   = sd(Urban_Pop, na.rm = TRUE),
+    
+    # Area Stats
+    Area_Min  = min(Urban_Area_km2, na.rm = TRUE),
+    Area_Q1   = quantile(Urban_Area_km2, 0.25, na.rm = TRUE),
+    Area_Mean = mean(Urban_Area_km2, na.rm = TRUE),
+    Area_Q3   = quantile(Urban_Area_km2, 0.75, na.rm = TRUE),
+    Area_Max  = max(Urban_Area_km2, na.rm = TRUE),
+    Area_SD   = sd(Urban_Area_km2, na.rm = TRUE)
+  )
+
+View(urban_area_stats)
+
+urban_data <- clean_data %>%
+  filter(
+    Country %in% c("United States", "China", "India", "Japan", "Brazil", "Indonesia")
+  )
+
+urban_data %>%
+  ggplot(
+    aes(
+      x = Urban_Area_km2,
+      y = Urban_Pop / 1000000,
+      color = Country,
+      group = Country
+    )
+  ) +
+  geom_point(alpha = 0.5) +
+  geom_line() +
+  scale_x_log10() +
+  labs(
+    title = "Urban Population by Area",
+    x = "Urban Area (km²)",
+    y = "Urban Population (Millions)"
+  )
+
