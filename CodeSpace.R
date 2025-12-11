@@ -107,7 +107,7 @@ ggplot(
 
 
 # Filter for Target Countries
-target_countries <- c("China", "India", "United States")
+target_countries <- c("United States", "China", "India", "Japan", "Brazil", "Indonesia")
 
 country_data <- clean_data %>%
   mutate(Country = str_trim(Country)) %>% 
