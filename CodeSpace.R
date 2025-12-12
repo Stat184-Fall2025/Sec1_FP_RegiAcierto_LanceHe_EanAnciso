@@ -5,18 +5,19 @@
 library(rvest)
 library(dplyr)
 library(stringr)
+library(tidyverse)
+library(ggplot2)
 
 # 1. Scrape the table
 url <- "https://en.wikipedia.org/wiki/List_of_largest_cities"
 webpage <- read_html(url)
 tables <- html_table(webpage, fill = TRUE)
 
-
+# Find the correct table containing "Jakarta"
 table_index <- which(sapply(tables, function(t) "Jakarta" %in% t[[1]]))
 city_table <- tables[[table_index]]
 
 # 2. Fix Column Names
-
 colnames(city_table) <- c(
   "City", "Country", "UN_Estimate_Pop", "Definition",
   "City_Pop", "City_Area_km2", "City_Density_per_km2",      # City Proper
@@ -26,8 +27,8 @@ colnames(city_table) <- c(
 
 # 3. Data Wrangling Pipeline
 clean_data <- city_table %>%
-  #Remove Garbage Header Row 
-  slice(-1) %>%
+
+    slice(-1) %>%
   
   select(
     City, Country, UN_Estimate_Pop,
@@ -35,30 +36,30 @@ clean_data <- city_table %>%
     Urban_Pop, Urban_Area_km2, Urban_Density_per_km2
   ) %>%
   
-  # Remove Footnotes and Commas ---
   mutate(across(everything(), ~str_remove_all(., "\\[.*?\\]"))) %>% 
   mutate(across(everything(), ~str_remove_all(., ","))) %>%
   
-
-  # Convert empty strings, dashes, and em-dashes to NA
   mutate(across(everything(), ~na_if(str_trim(.), ""))) %>%
   mutate(across(everything(), ~na_if(str_trim(.), "—"))) %>%
   mutate(across(everything(), ~na_if(str_trim(.), "-"))) %>%
   mutate(across(everything(), ~na_if(str_trim(.), "–"))) %>%
   
-
   filter(
     !is.na(City_Pop), !is.na(City_Area_km2), !is.na(City_Density_per_km2),
     !is.na(Urban_Pop), !is.na(Urban_Area_km2), !is.na(Urban_Density_per_km2)
   ) %>%
   
-  mutate(across(3:9, as.numeric))
+  mutate(across(3:9, as.numeric)) %>%
+  
+  mutate(Country = str_trim(Country))
 
 # 4. View Result
 View(clean_data)
 
 
-library(ggplot2)
+
+
+
 ## First table
 firstTable <- clean_data %>%
   group_by(Country) %>%
@@ -70,50 +71,14 @@ firstTable <- clean_data %>%
   ) %>%
   arrange(desc(entries))
 
-## Visual showing Density vs Area (Look at top 6 entries)
-
-Hentries <- clean_data %>%
-  filter(Country %in% c("China", "India", "United States", "Japan", "Brazil", "Indonesia"))
-
-### City Proper
-ggplot(
-  Hentries,
-  aes(
-    City_Area_km2, 
-    City_Density_per_km2, 
-    color = Country
-    ),
-  ) +
-  geom_point(size = 3) +
-  scale_x_log10() +
-  scale_y_log10() +
-  labs(title = "Area vs Density(City Proper): Top 6 Countries with most largest cities")
-
-### Urban Area
-ggplot(
-  Hentries,
-  aes(
-    Urban_Area_km2, 
-    Urban_Density_per_km2, 
-    color = Country
-  ),
-) +
-  geom_point(size = 3) +
-  scale_x_log10() +
-  scale_y_log10() +
-  labs(title = "Area vs Density(Urban Area): Top 6 Countries with most largest cities")
+View(firstTable)
 
 
-
-
-# Filter for Target Countries
+# Filter for the Target 6 Countries
 target_countries <- c("United States", "China", "India", "Japan", "Brazil", "Indonesia")
-
 country_data <- clean_data %>%
-  mutate(Country = str_trim(Country)) %>% 
   filter(Country %in% target_countries)
 
-# Create Summary Tables 
 
 # Table A: Urban Area Statistics 
 urban_area_stats <- country_data %>%
@@ -136,13 +101,47 @@ urban_area_stats <- country_data %>%
     Area_SD   = sd(Urban_Area_km2, na.rm = TRUE)
   )
 
+
 View(urban_area_stats)
 
-urban_data <- clean_data %>%
-  filter(
-    Country %in% c("United States", "China", "India", "Japan", "Brazil", "Indonesia")
+# Table B: City Proper Statistics 
+city_proper_stats <- country_data %>%
+  group_by(Country) %>%
+  summarise(
+    # Population Stats
+    Pop_Min  = min(City_Pop, na.rm = TRUE),
+    Pop_Q1   = quantile(City_Pop, 0.25, na.rm = TRUE),
+    Pop_Mean = mean(City_Pop, na.rm = TRUE),
+    Pop_Q3   = quantile(City_Pop, 0.75, na.rm = TRUE),
+    Pop_Max  = max(City_Pop, na.rm = TRUE),
+    Pop_SD   = sd(City_Pop, na.rm = TRUE),
+    
+    # Area Stats
+    Area_Min  = min(City_Area_km2, na.rm = TRUE),
+    Area_Q1   = quantile(City_Area_km2, 0.25, na.rm = TRUE),
+    Area_Mean = mean(City_Area_km2, na.rm = TRUE),
+    Area_Q3   = quantile(City_Area_km2, 0.75, na.rm = TRUE),
+    Area_Max  = max(City_Area_km2, na.rm = TRUE),
+    Area_SD   = sd(City_Area_km2, na.rm = TRUE)
   )
 
+
+View(city_proper_stats)
+
+
+
+
+
+target_countries <- c("United States", "China", "India", "Japan", "Brazil", "Indonesia")
+
+urban_data <- clean_data %>%
+  filter(Country %in% target_countries)
+
+city_proper_data <- clean_data %>%
+  filter(Country %in% target_countries)
+
+# Plot 1: Urban Population by Area
+# X = Urban Area, Y = Urban Population
 urban_data %>%
   ggplot(
     aes(
@@ -161,3 +160,22 @@ urban_data %>%
     y = "Urban Population (Millions)"
   )
 
+# Plot 2: City Proper Population by Area
+# X = City Area, Y = City Population
+city_proper_data %>%
+  ggplot(
+    aes(
+      x = City_Area_km2,
+      y = City_Pop / 1000000,
+      color = Country,
+      group = Country
+    )
+  ) +
+  geom_point(alpha = 0.5) +
+  geom_line() +
+  scale_x_log10() +
+  labs(
+    title = "City Proper Population by Area",
+    x = "City Proper Area (km²)",
+    y = "City Proper Population (Millions)"
+  )
