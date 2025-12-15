@@ -25,6 +25,32 @@ execute:
   warning: false
 ---
 
+```{r}
+#| label: loadPackages
+
+# Load Packages
+library(rvest)
+library(dplyr)
+library(stringr)
+library(ggplot2)
+
+```
+
+```{r}
+#| label: tbl-countries
+#| tbl-cap: "Countries Ranked by amount of Entries"
+
+firstTable <- clean_data %>%
+  group_by(Country) %>%
+  summarise(
+    entries = n(),
+    total_pop = sum(UN_Estimate_Pop, na.rm = TRUE),
+    total_city_pop = sum(City_Pop, na.rm = TRUE),
+    total_urban_pop = sum(Urban_Pop, na.rm = TRUE)
+  ) %>%
+  arrange(desc(entries))
+
+```
 
 {{< pagebreak >}}
 # Code Appendix
