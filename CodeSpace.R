@@ -171,11 +171,6 @@ urban_data <- clean_data %>%
 
 View(city_proper_data)
 
-city_proper_data %>%
-  ggplot(
-    aes(
-      x = City_Area_km2,
-      y = City_Pop / 1000000,
 urban_data %>%
   ggplot(
     aes(
@@ -219,8 +214,5 @@ city_proper_data %>%
     x = "City Proper Area (km²)",
     y = "City Proper Population (Millions)"
   )
-    title = "Urban Population by Area",
-    x = "Urban Area (km²)",
-    y = "Urban Population (Millions)"
-  )
+    
 
