@@ -27,8 +27,8 @@ colnames(city_table) <- c(
 
 # 3. Data Wrangling Pipeline
 clean_data <- city_table %>%
-
-    slice(-1) %>%
+  
+  slice(-1) %>%
   
   select(
     City, Country, UN_Estimate_Pop,
@@ -160,14 +160,8 @@ urban_data %>%
     y = "City Proper Population (Millions)"
   )
 
-# Line plot for city proper population by area for top 6 cities
-city_proper_data <- clean_data %>%
-  filter(
-    Country %in% c("United States", "China", "India", "Japan", "Brazil", "Indonesia")
-  )
-
-View(city_proper_data)
-
+# Plot 2: City Proper Population by Area
+# X = City Area, Y = City Population
 city_proper_data %>%
   ggplot(
     aes(
@@ -185,10 +179,7 @@ city_proper_data %>%
     x = "City Proper Area (km²)",
     y = "City Proper Population (Millions)"
   )
-    title = "Urban Population by Area",
-    x = "Urban Area (km²)",
-    y = "Urban Population (Millions)"
-  )
+
 
 # Plot 2: City Proper Population by Area
 # X = City Area, Y = City Population
