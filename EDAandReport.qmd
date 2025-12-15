@@ -52,6 +52,64 @@ firstTable <- clean_data %>%
 
 ```
 
+```{r}
+#| label: fig-urban_plot
+#| fig-cap: "Urban Population by Area"
+
+# Plot 1: Urban Population by Area
+# X = Urban Area, Y = Urban Population
+urban_data <- clean_data %>%
+  filter(Country %in% target_countries)
+
+urban_data %>%
+  ggplot(
+    aes(
+      x = Urban_Area_km2,
+      y = Urban_Pop / 1000000,
+      color = Country,
+      group = Country
+    )
+  ) +
+  geom_point(alpha = 0.5) +
+  geom_line() +
+  scale_x_log10() +
+  labs(
+    title = "Urban Population by Area",
+    x = "Urban Area (km²)",
+    y = "Urban Population (Millions)"
+  )
+```
+
+```{r}
+#| label: fig-city_proper_plot
+#| fig-cap: "City Proper Population by Area"
+
+# Plot 2: City Proper Population by Area
+# X = City Area, Y = City Population
+city_proper_data <- clean_data %>%
+  filter(Country %in% target_countries)
+
+city_proper_data %>%
+  ggplot(
+    aes(
+      x = City_Area_km2,
+      y = City_Pop / 1000000,
+      color = Country,
+      group = Country
+    )
+  ) +
+  geom_point(alpha = 0.5) +
+  geom_line() +
+  scale_x_log10() +
+  labs(
+    title = "City Proper Population by Area",
+    x = "City Proper Area (km²)",
+    y = "City Proper Population (Millions)"
+  )
+
+
+```
+
 {{< pagebreak >}}
 # Code Appendix
 
