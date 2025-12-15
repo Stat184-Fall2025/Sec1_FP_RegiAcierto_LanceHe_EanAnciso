@@ -181,3 +181,22 @@ city_proper_data %>%
   )
 
 
+# Plot 2: City Proper Population by Area
+# X = City Area, Y = City Population
+city_proper_data %>%
+  ggplot(
+    aes(
+      x = City_Area_km2,
+      y = City_Pop / 1000000,
+      color = Country,
+      group = Country
+    )
+  ) +
+  geom_point(alpha = 0.5) +
+  geom_line() +
+  scale_x_log10() +
+  labs(
+    title = "City Proper Population by Area",
+    x = "City Proper Area (km²)",
+    y = "City Proper Population (Millions)"
+  )
