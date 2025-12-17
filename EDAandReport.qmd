@@ -4,6 +4,7 @@ author:
   - "Ean Anciso"
   - "Lance He"
   - "Regi Acierto"
+date: "Dec. 4, 2025"
 format: 
   pdf:
     toc: false
@@ -17,8 +18,6 @@ format:
       - right=1in
       - bottom=1in
     colorlinks: true
-date: "Dec. 4, 2025"
-date-modified: now
 execute: 
   echo: false
   warning: false
