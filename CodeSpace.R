@@ -180,3 +180,32 @@ city_proper_data %>%
     y = "City Proper Population (Millions)"
   )
 
+## Plots showing Area vs Density
+Top_entries <- clean_data %>%
+  filter(Country %in% c("China", "India", "United States", "Japan", "Brazil", "Indonesia"))
+
+ggplot(
+  Top_entries,
+  aes(
+    City_Area_km2, 
+    City_Density_per_km2, 
+    color = Country
+  ),
+) +
+  geom_point(size = 3) +
+  scale_x_log10() +
+  scale_y_log10() +
+  labs(title = "Area vs Density(City Proper): Top 6 Countries with most largest cities")
+
+ggplot(
+  Top_entries,
+  aes(
+    Urban_Area_km2, 
+    Urban_Density_per_km2, 
+    color = Country
+  ),
+) +
+  geom_point(size = 3) +
+  scale_x_log10() +
+  scale_y_log10() +
+  labs(title = "Area vs Density(Urban Area): Top 6 Countries with most largest cities")
