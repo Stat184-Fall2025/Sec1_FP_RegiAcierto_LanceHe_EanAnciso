@@ -23,8 +23,6 @@ execute:
   warning: false
 ---
 
-<<<<<<< Updated upstream
-=======
 ```{r}
 #| label: loadPackagesAndData
 
@@ -199,7 +197,7 @@ city_proper_data %>%
   ) +
   theme_minimal()
 ```
->>>>>>> Stashed changes
+
 
 {{< pagebreak >}}
 # Code Appendix
