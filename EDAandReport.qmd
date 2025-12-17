@@ -23,10 +23,18 @@ execute:
   warning: false
 ---
 
+# Data
+The primary dataset for this analysis is the "List of Largest Cities" from Wikipedia, which compiles recent population estimates for the world's largest urban agglomerations. A key challenge in urban data analysis is the definition of "city," as political boundaries often differ from physical settlements.
+
+To ensure clarity, we differentiate between two key terms used throughout this report:
+
+City Proper: The population living within the city's legally defined administrative boundaries. This definition is strict and governed by a single local authority, often excluding suburbs or commuters.
+
+Urban Area: A definition based on the continuous built-up environment, physical settlements, and population density. This metric is less rigid and often better reflects the actual "lived" city.
+
 ```{r}
 #| label: loadPackagesAndData
 
-# 1. Load Packages
 library(rvest)
 library(dplyr)
 library(stringr)
@@ -34,16 +42,13 @@ library(ggplot2)
 library(knitr)
 library(tidyverse)
 
-# 2. Scrape the table
 url <- "https://en.wikipedia.org/wiki/List_of_largest_cities"
 webpage <- read_html(url)
 tables <- html_table(webpage, fill = TRUE)
 
-# Find the correct table containing "Jakarta"
 table_index <- which(sapply(tables, function(t) "Jakarta" %in% t[[1]]))
 city_table <- tables[[table_index]]
 
-# 3. Fix Column Names
 colnames(city_table) <- c(
   "City", "Country", "UN_Estimate_Pop", "Definition",
   "City_Pop", "City_Area_km2", "City_Density_per_km2",      # City Proper
@@ -51,7 +56,6 @@ colnames(city_table) <- c(
   "Metro_Pop", "Metro_Area_km2", "Metro_Density_per_km2"    # Metropolitan
 )
 
-# 4. Data Wrangling Pipeline
 clean_data <- city_table %>%
   # Remove Garbage Header Row
   slice(-1) %>%
@@ -62,37 +66,36 @@ clean_data <- city_table %>%
     Urban_Pop, Urban_Area_km2, Urban_Density_per_km2
   ) %>%
   
-  # Clean Text (Remove Footnotes and Commas)
   mutate(across(everything(), ~str_remove_all(., "\\[.*?\\]"))) %>% 
   mutate(across(everything(), ~str_remove_all(., ","))) %>%
   
-  # Handle Missing Values
   mutate(across(everything(), ~na_if(str_trim(.), ""))) %>%
   mutate(across(everything(), ~na_if(str_trim(.), "—"))) %>%
   mutate(across(everything(), ~na_if(str_trim(.), "-"))) %>%
   mutate(across(everything(), ~na_if(str_trim(.), "–"))) %>%
   
-  # Filter Rows with complete City/Urban data
   filter(
     !is.na(City_Pop), !is.na(City_Area_km2), !is.na(City_Density_per_km2),
     !is.na(Urban_Pop), !is.na(Urban_Area_km2), !is.na(Urban_Density_per_km2)
   ) %>%
   
-  # Convert Columns to Numeric
   mutate(across(3:9, as.numeric)) %>%
   
-  # Clean Country Names
   mutate(Country = str_trim(Country))
 
-# 5. Filter for Target Countries
 target_countries <- c("United States", "China", "India", "Japan", "Brazil", "Indonesia")
 country_data <- clean_data %>%
   filter(Country %in% target_countries)
 ```
+# Global Overview
+@tbl-countries presents a frequency table ranking countries by the number of their cities that appear in the top-tier of our raw dataset. While many countries appear only once, a select few dominate the list, highlighting the uneven distribution of global urbanization.
+
+China leads the dataset, which aligns with its status as one of the world's most populous nations. India and the United States follow, showing that large megacities are a feature of major economies regardless of development path. Notably, Japan, Brazil, and Indonesia also feature prominently in the top 6. This is significant as it suggests that geography and historical urbanization patterns (e.g., coastal density in Indonesia and Japan) play a major role alongside total population size.
 
 ```{r}
 #| label: tbl-countries
 #| tbl-cap: "Countries Ranked by amount of Entries"
+#| tbl-cap-location: bottom
 
 firstTable <- clean_data %>%
   group_by(Country) %>%
@@ -104,13 +107,17 @@ firstTable <- clean_data %>%
   ) %>%
   arrange(desc(entries))
 
-# Print table using kable for PDF formatting
 kable(head(firstTable, 10), caption = "Top 10 Countries by Number of Cities")
 ```
 
+# Statistical Summary
+We performed a comparative analysis of the top 6 countries to understand the statistical distribution of their urban populations.
+
+@tbl-urban-stats and @tbl-city-stats summarize the population and area statistics for Urban Areas and City Proper, respectively. A key observation is the difference in variability (Standard Deviation). Urban Areas tend to have more consistent definitions of density compared to the administrative "City Proper" definitions, which can vary wildly depending on local laws.
 ```{r}
 #| label: tbl-urban-stats
 #| tbl-cap: "Urban Area Statistics (Top 6 Countries)"
+
 
 # Table A: Urban Area Statistics
 urban_area_stats <- country_data %>%
@@ -129,6 +136,7 @@ kable(urban_area_stats, digits = 0)
 #| label: tbl-city-stats
 #| tbl-cap: "City Proper Statistics (Top 6 Countries)"
 
+
 # Table B: City Proper Statistics
 city_proper_stats <- country_data %>%
   group_by(Country) %>%
@@ -141,13 +149,19 @@ city_proper_stats <- country_data %>%
 
 kable(city_proper_stats, digits = 0)
 ```
+{{< pagebreak >}}
+# Visual Analysis: Population vs. Area Trends
 
+
+The following plots visualize the relationship between Area (x-axis) and Population (y-axis). Note that both axes use a logarithmic scale to accommodate the massive range in city sizes.
+
+@fig-urban_plot shows the relationship for Urban Areas. We observe a generally positive correlation—as physical area grows, population grows.
 ```{r}
 #| label: fig-urban_plot
 #| fig-cap: "Urban Population by Area"
+#| out-width: "70%"
 
 # Plot 1: Urban Population by Area
-# X = Urban Area, Y = Urban Population
 urban_data <- country_data # Uses the filtered data from setup
 
 urban_data %>%
@@ -170,12 +184,13 @@ urban_data %>%
   theme_minimal()
 ```
 
+
 ```{r}
 #| label: fig-city_proper_plot
 #| fig-cap: "City Proper Population by Area"
+#| out-width: "70%"
 
 # Plot 2: City Proper Population by Area
-# X = City Area, Y = City Population
 city_proper_data <- country_data # Uses the filtered data from setup
 
 city_proper_data %>%
@@ -198,8 +213,67 @@ city_proper_data %>%
   theme_minimal()
 ```
 
+In contrast, @fig-city_proper_plot shows the data for City Proper. This plot is noticeably more scattered. This supports the hypothesis that "City Proper" is a political definition rather than a geographic one, leading to inconsistent relationships between size and population across different nations.
 
-{{< pagebreak >}}
+# Visual Analysis: Density vs Area Trends
+
+Finally, we analyze the relationship between Area and Density. @fig-DenbyareaCP displays this for City Proper. The plot exhibits an inverse trend: as area increases, density tends to decrease.
+
+Notably, China and the United States display cities with very large administrative areas but relatively lower densities. In contrast, Japan, Indonesia, and India cluster around smaller areas with extremely high densities. This discrepancy often arises because some countries include vast suburban or rural zones within their "City Proper" limits, inflating the area and artificially lowering the density.
+
+
+```{r}
+#| label: fig-DenbyareaCP
+#| fig-cap: "City Proper, Density vs Area for Top 6 Countries with amount of large cities"
+#| out-width: "85%"
+
+Top_entries <- clean_data %>% # Get target countries(Top 6)
+  filter(Country %in% c("China", "India", "United States", "Japan", "Brazil", "Indonesia"))
+
+ggplot(
+  Top_entries,
+  aes(
+    City_Area_km2, 
+    City_Density_per_km2, 
+    color = Country
+  ),
+) +
+  geom_point(size = 3) +
+  scale_x_log10() +
+  scale_y_log10()
+
+```
+
+@fig-DenbyareaUA repeats this analysis for Urban Area. Here, the data is slightly more consistent. The United States still distinctively occupies the "High Area, Low Density" quadrant, reflecting its sprawling, car-centric infrastructure. Meanwhile, Chinese cities shift towards moderate area and density values when looking at the built-up environment rather than administrative borders.
+
+Conclusively, Urban Area appears to be a more robust and comparable measure of a city's actual demographic footprint than City Proper.
+
+\newpage
+
+```{r}
+#| label: fig-DenbyareaUA
+#| fig-cap: "Urban Area, Density vs Area for Top 6 Countries with amount of large cities"
+#| out-width: "85%"
+
+Top_entries <- clean_data %>% # Get target countries(Top 6)
+  filter(Country %in% c("China", "India", "United States", "Japan", "Brazil", "Indonesia"))
+
+ggplot(
+  Top_entries,
+  aes(
+    Urban_Area_km2, 
+    Urban_Density_per_km2, 
+    color = Country
+  ),
+) +
+  geom_point(size = 3) +
+  scale_x_log10() +
+  scale_y_log10()
+
+```
+
+
+\newpage
 # Code Appendix
 
 ```{r codeAppend, ref.label=knitr::all_labels(), echo=TRUE, eval=FALSE}
