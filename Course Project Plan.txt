@@ -20,3 +20,11 @@ Visualization Planning (Possibly Look at Total VS City Proper VS Urban Area)
 First - Table showing Country, Count, Total Pop
 Second - Segmented Bar Chart Showing Countries(Segmented by city)
 Third - Line Chart of Area vs Density, Each line is different country
+
+QMD Planning(Already has YAML, Code appendix)
+- Add Visualization Code
+- Add Narrative text
+
+Add Work in Progress slides
+
+Add EDA Document
