@@ -23,6 +23,13 @@ execute:
   warning: false
 ---
 
+# Data
+The original dataset, List of Largest Cities - Wikipedia, compiles data about the largest cities. For part of this original data and the data used in this report, the terms City proper and Urban area are used. To help understanding, City Proper and Urban Area will be defined here.
+
+City Proper - The population living in a city's legally defined administrative boundaries and governed by a single local authority. This can disinclude places like suburbs or commuters.
+
+Urban Area - Defined by large physical settlements, urban activity, and population density. This is less rigid.
+
 ```{r}
 #| label: loadPackagesAndData
 
@@ -89,10 +96,13 @@ target_countries <- c("United States", "China", "India", "Japan", "Brazil", "Ind
 country_data <- clean_data %>%
   filter(Country %in% target_countries)
 ```
+# Visualizations
+@tbl-countries is a frequency table showing the top 10 countries ranked in descending order by the number of times it appears on in our raw dataset. This means that the countries with the most amount of large populated cities, large population being defined by wikipedia, will be listed. Many of the countries in this dataset only appear once, but there are a a few that show multiple times and some that show even more. This table gives insight to how many of our populated cities are not distributed evenly. China is shown as the country with the most amount of large cities. This may not come as a surpise, since China is known for its large population. The same is true for India and even the United States. Perhaps more surpisingly, Japan, Brazil, and Indonesia all reside in the top 6 countries with most large cities. This is interesting as these are smaller countries, that might not be expected over other big countries. This shows how many factors can effect this dataset like geography, history, natural selection, etc.
 
 ```{r}
 #| label: tbl-countries
 #| tbl-cap: "Countries Ranked by amount of Entries"
+#| tbl-cap-location: bottom
 
 firstTable <- clean_data %>%
   group_by(Country) %>%
@@ -197,7 +207,51 @@ city_proper_data %>%
   ) +
   theme_minimal()
 ```
+# Area versus Density
+@fig-AreabydenCP, this scatterplot shows Density versus Area, in City Proper, for the chosen countries. The chosen countries were the top 6 countries shown in @tbl-countries. The plot exhibits an inverse trend where area increases and density decreases. Notably, China and the United States display cities with very large areas and relatively low densities, while Japan, Indonesia, and India cluster around smaller areas with higher densities. The difference between these countries in this plot is how their administrative boundaries are defined. Some of the countries, define their boundaries to include extensive area like suburban or rural. This can inflate area and naturally lower density.
 
+```{r}
+#| label: fig-DenbyareaCP
+#| fig-cap: "City Proper, Density vs Area for Top 6 Countries with amount of large cities"
+
+Top_entries <- clean_data %>% # Get target countries(Top 6)
+  filter(Country %in% c("China", "India", "United States", "Japan", "Brazil", "Indonesia"))
+
+ggplot(
+  Top_entries,
+  aes(
+    City_Area_km2, 
+    City_Density_per_km2, 
+    color = Country
+  ),
+) +
+  geom_point(size = 3) +
+  scale_x_log10() +
+  scale_y_log10()
+
+```
+
+@fig-DenbyareaUA this is a similar scatterplot as the previous, instead using Urban Area data and definition. Overall, the data seems slightly more consistent. The United States still shows large area with little density. This is consistent with the sprawling, car-focused infrastructure of the US. In contrast, China shifts towards moderate area and density values. Conclusively, Urban Area seems to be a much more true measure of a city's population, area, and density.
+```{r}
+#| label: fig-DenbyareaUA
+#| fig-cap: "Urban Area, Density vs Area for Top 6 Countries with amount of large cities"
+
+Top_entries <- clean_data %>% # Get target countries(Top 6)
+  filter(Country %in% c("China", "India", "United States", "Japan", "Brazil", "Indonesia"))
+
+ggplot(
+  Top_entries,
+  aes(
+    Urban_Area_km2, 
+    Urban_Density_per_km2, 
+    color = Country
+  ),
+) +
+  geom_point(size = 3) +
+  scale_x_log10() +
+  scale_y_log10()
+
+```
 
 {{< pagebreak >}}
 # Code Appendix
