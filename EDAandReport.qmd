@@ -125,6 +125,8 @@ We performed a comparative analysis of the top 6 countries to understand the sta
 #| label: tbl-urban-stats
 #| tbl-cap: "Urban Area Statistics (Top 6 Countries)"
 #| tbl-alt: A table showing urban area statistics for the top six countries, including Brazil, China, India, Indonesia, Japan, and the United States, with columns for population and area mean and standard deviation.
+# Alt text created using ASU Image Accesibility Creator
+
 
 # Main Author: Lance He, Reviewer(s): Ean Anciso, Regi Acierto
 
@@ -145,6 +147,8 @@ kable(urban_area_stats, digits = 0)
 #| label: tbl-city-stats
 #| tbl-cap: "City Proper Statistics (Top 6 Countries)"
 #| tbl-alt: A table showing population and area statistics for the top six countries.
+
+# Alt text created using ASU Image Accesibility Creator
 
 
 # Main Author: Regi Acierto, Reviewer(s): Lance He, Ean Anciso
@@ -174,6 +178,7 @@ The following plots visualize the relationship between Area (x-axis) and Populat
 #| out-width: "70%"
 #| fig-alt: Graph showing urban population vs. urban area for six countries with distinct colored lines.
 
+# Alt text created using ASU Image Accesibility Creator
 
 
 # Main Author: Lance He, Reviewer(s): Ean Anciso, Regi Acierto
@@ -210,6 +215,7 @@ urban_data %>%
 #| out-width: "70%"
 #| fig-alt: Line graph of city populations by area for Brazil, China, India, Indonesia, Japan, and the United States.
 
+# Alt text created using ASU Image Accesibility Creator
 
 
 # Main Author: Regi Acierto, Reviewer(s): Ean Anciso, Lance He
