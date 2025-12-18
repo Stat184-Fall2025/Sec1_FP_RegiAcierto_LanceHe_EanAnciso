@@ -24,7 +24,7 @@ execute:
 ---
 
 # Data
-The primary dataset for this analysis is the "List of Largest Cities" from Wikipedia, which compiles recent population estimates for the world's largest urban agglomerations. A key challenge in urban data analysis is the definition of "city," as political boundaries often differ from physical settlements.
+The primary dataset for this analysis is the "List of Largest Cities" from Wikipedia, which compiles recent population estimates based on key definitions. A challenge in urban data analysis is the definition of "city," as political boundaries often differ from physical settlements.
 
 To ensure clarity, we differentiate between two key terms used throughout this report:
 
@@ -34,6 +34,8 @@ Urban Area: A definition based on the continuous built-up environment, physical 
 
 ```{r}
 #| label: loadPackagesAndData
+
+# Main Author: Lance He, Reviewer(s): Ean Anciso, Regi Acierto
 
 library(rvest)
 library(dplyr)
@@ -90,12 +92,14 @@ country_data <- clean_data %>%
 # Global Overview
 @tbl-countries presents a frequency table ranking countries by the number of their cities that appear in the top-tier of our raw dataset. While many countries appear only once, a select few dominate the list, highlighting the uneven distribution of global urbanization.
 
-China leads the dataset, which aligns with its status as one of the world's most populous nations. India and the United States follow, showing that large megacities are a feature of major economies regardless of development path. Notably, Japan, Brazil, and Indonesia also feature prominently in the top 6. This is significant as it suggests that geography and historical urbanization patterns (e.g., coastal density in Indonesia and Japan) play a major role alongside total population size.
+China leads the dataset, which aligns with its status as one of the world's most populous nations. India and the United States follow, showing that large megacities are a feature of major economies regardless of development path. Notably, Japan, Brazil, and Indonesia also feature prominently in the top 6. This is significant as it suggests that geography and historical urbanization patterns play a major role alongside total population size.
 
 ```{r}
 #| label: tbl-countries
 #| tbl-cap: "Countries Ranked by amount of Entries"
 #| tbl-cap-location: bottom
+
+# Main Author: Ean Anciso, Reviewer(s): Regi Acierto, Lance He
 
 firstTable <- clean_data %>%
   group_by(Country) %>%
@@ -118,6 +122,7 @@ We performed a comparative analysis of the top 6 countries to understand the sta
 #| label: tbl-urban-stats
 #| tbl-cap: "Urban Area Statistics (Top 6 Countries)"
 
+# Main Author: Lance He, Reviewer(s): Ean Anciso, Regi Acierto
 
 # Table A: Urban Area Statistics
 urban_area_stats <- country_data %>%
@@ -136,6 +141,7 @@ kable(urban_area_stats, digits = 0)
 #| label: tbl-city-stats
 #| tbl-cap: "City Proper Statistics (Top 6 Countries)"
 
+# Main Author: Regi Acierto, Reviewer(s): Lance He, Ean Anciso
 
 # Table B: City Proper Statistics
 city_proper_stats <- country_data %>%
@@ -160,6 +166,8 @@ The following plots visualize the relationship between Area (x-axis) and Populat
 #| label: fig-urban_plot
 #| fig-cap: "Urban Population by Area"
 #| out-width: "70%"
+
+# Main Author: Lance He, Reviewer(s): Ean Anciso, Regi Acierto
 
 # Plot 1: Urban Population by Area
 urban_data <- country_data # Uses the filtered data from setup
@@ -189,6 +197,8 @@ urban_data %>%
 #| label: fig-city_proper_plot
 #| fig-cap: "City Proper Population by Area"
 #| out-width: "70%"
+
+# Main Author: Regi Acierto, Reviewer(s): Ean Anciso, Lance He
 
 # Plot 2: City Proper Population by Area
 city_proper_data <- country_data # Uses the filtered data from setup
@@ -227,6 +237,8 @@ Notably, China and the United States display cities with very large administrati
 #| fig-cap: "City Proper, Density vs Area for Top 6 Countries with amount of large cities"
 #| out-width: "85%"
 
+# Main Author: Ean Anciso, Reviewer(s): Lance He, Regi Acierto
+
 Top_entries <- clean_data %>% # Get target countries(Top 6)
   filter(Country %in% c("China", "India", "United States", "Japan", "Brazil", "Indonesia"))
 
@@ -239,7 +251,7 @@ ggplot(
   ),
 ) +
   geom_point(size = 3) +
-  scale_x_log10() +
+  scale_x_log10() + # Scale the scale values
   scale_y_log10()
 
 ```
@@ -255,6 +267,8 @@ Conclusively, Urban Area appears to be a more robust and comparable measure of a
 #| fig-cap: "Urban Area, Density vs Area for Top 6 Countries with amount of large cities"
 #| out-width: "85%"
 
+# Main Author: Ean Anciso, Reviewer(s): Lance He, Regi Acierto
+
 Top_entries <- clean_data %>% # Get target countries(Top 6)
   filter(Country %in% c("China", "India", "United States", "Japan", "Brazil", "Indonesia"))
 
@@ -267,7 +281,7 @@ ggplot(
   ),
 ) +
   geom_point(size = 3) +
-  scale_x_log10() +
+  scale_x_log10() + # Scale the scale values
   scale_y_log10()
 
 ```

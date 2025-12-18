@@ -1,28 +1,28 @@
-# Project Title
+# Stat 184 Section 1, Final Project
 
-Write a 1-2 sentences that quickly and clearly convey what your repo is for.
+This repo is to create and display our groups final project. This final project will demonstrate our abilities and knowledge gained through the Stat 184 course.
 
 ## Overview
 
-Expand on those introductory sentences with a brief but informative description of your project's purpose and goals. This section should help visitors decide whether they should dig deeper into your repo/project.
-
-### Interesting Insight (Optional)
-
-This is optional but highly recommended. You'll include one interesting insight from your project as part of the README. This insight is most effective when you include a visual. Keep in mind that this visual must be included as an image file (e.g., JPG, PNG, etc.). You can export plots created with `{ggplot2}` by using the function `ggsave`.
+This projects purpose is to demonstrate each members proficiency with GitHub, GitHub desktop, and R studio. It is also a goal to show our ability to find and wrangle data, create meaningful observations and visuals from the data, and create an insightful report.
 
 ## Data Sources and Acknowledgements
 
-Be sure to list where you got any data used within the project. Be sure to acknowledge any one whose work or elements you're drawing upon.
+Data Source: https://en.wikipedia.org/wiki/List_of_largest_cities ("List of Largest Cities" - Wikipedia)
 
 ## Current Plan
 
-Provide some information about what you intend to doe with the project. You can additionally refer the visitor to your detailed plan document.
+A brief overview of the plan will be to
+- Find data that conclusions can be drawn from
+- Wrangle and Tidy Data
+- Create Visualizations From Data
+- Create Quarto Document to organize report
+- Output PDF Report displaying visuals along with narrative text
 
 ## Repo Structure
 
-Use this section to explain the structure of your repo. This should help visitors quickly figure out where they should look to find certain elements. Further, you can use this space to highlight and briefly explain important/key files in the repo.
-
+This repo will have files at the top level. Additionally, the CodeSpace.R file contains all code used in the project. Any file starting wit EDAandReport will be related to the main report. 
 
 ## Authors
 
-Give information about who are the authors of the project and how people can get in touch if they have questions.
+The authors of this repo are Ean Anciso, Lance He, and Regi Acierto. To get in touch with any of the authors, reach out to efa5363@psu.edu, (Lance He), or rja5905@psu.edu.
