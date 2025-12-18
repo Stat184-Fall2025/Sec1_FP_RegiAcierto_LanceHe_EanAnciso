@@ -98,9 +98,6 @@ China leads the dataset, which aligns with its status as one of the world's most
 #| label: tbl-countries
 #| tbl-cap: "Countries Ranked by amount of Entries"
 #| tbl-cap-location: bottom
-#| tbl-alt: Two tables show countries ranked by city numbers and entries, displaying population data.
-
-# Alt text created using ASU Image Accesibility Creator
 
 # Main Author: Ean Anciso, Reviewer(s): Regi Acierto, Lance He
 
@@ -124,7 +121,6 @@ We performed a comparative analysis of the top 6 countries to understand the sta
 ```{r}
 #| label: tbl-urban-stats
 #| tbl-cap: "Urban Area Statistics (Top 6 Countries)"
-#| tbl-alt: A table showing urban area statistics for the top six countries, including Brazil, China, India, Indonesia, Japan, and the United States, with columns for population and area mean and standard deviation.
 
 # Main Author: Lance He, Reviewer(s): Ean Anciso, Regi Acierto
 
