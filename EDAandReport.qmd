@@ -166,6 +166,7 @@ The following plots visualize the relationship between Area (x-axis) and Populat
 #| label: fig-urban_plot
 #| fig-cap: "Urban Population by Area"
 #| out-width: "70%"
+#| fig-alt: !expr get_alt_text(get_last_plot())
 
 # Main Author: Lance He, Reviewer(s): Ean Anciso, Regi Acierto
 
@@ -187,7 +188,9 @@ urban_data %>%
   labs(
     title = "Urban Population by Area",
     x = "Urban Area (km², log scale)",
-    y = "Urban Population (Millions)"
+    y = "Urban Population (Millions)",
+    alt = "Line graph showing urban population by area for six countries with varying trends."
+    # Alt Text Created using ASU Image Accesibility tool
   ) +
   theme_minimal()
 ```
@@ -197,6 +200,7 @@ urban_data %>%
 #| label: fig-city_proper_plot
 #| fig-cap: "City Proper Population by Area"
 #| out-width: "70%"
+#| fig-alt: !expr get_alt_text(get_last_plot())
 
 # Main Author: Regi Acierto, Reviewer(s): Ean Anciso, Lance He
 
@@ -218,7 +222,9 @@ city_proper_data %>%
   labs(
     title = "City Proper Population by Area",
     x = "City Proper Area (km², log scale)",
-    y = "City Proper Population (Millions)"
+    y = "City Proper Population (Millions)",
+    alt = "Line graph charting city population versus area for countries: Brazil, China, India, Indonesia, Japan, United States."
+    # Alt Text created using ASU Image Accesibility tool
   ) +
   theme_minimal()
 ```
@@ -236,6 +242,7 @@ Notably, China and the United States display cities with very large administrati
 #| label: fig-DenbyareaCP
 #| fig-cap: "City Proper, Density vs Area for Top 6 Countries with amount of large cities"
 #| out-width: "85%"
+#| fig-alt: !expr get_alt_text(get_last_plot())
 
 # Main Author: Ean Anciso, Reviewer(s): Lance He, Regi Acierto
 
@@ -252,7 +259,13 @@ ggplot(
 ) +
   geom_point(size = 3) +
   scale_x_log10() + # Scale the scale values
-  scale_y_log10()
+  scale_y_log10() +
+  labs(
+    x = "City Proper Area (km²)",
+    y = "City Proper Density (km²)",
+    alt = "Scatter plot showing urban area vs. density for Brazil, China, India, Indonesia, Japan, and the US, color-coded by country."
+    # Alt Text Created using ASU Image Accesibility tool
+  )
 
 ```
 
@@ -266,6 +279,8 @@ Conclusively, Urban Area appears to be a more robust and comparable measure of a
 #| label: fig-DenbyareaUA
 #| fig-cap: "Urban Area, Density vs Area for Top 6 Countries with amount of large cities"
 #| out-width: "85%"
+#| fig-alt: !expr get_alt_text(get_last_plot())
+
 
 # Main Author: Ean Anciso, Reviewer(s): Lance He, Regi Acierto
 
@@ -282,7 +297,13 @@ ggplot(
 ) +
   geom_point(size = 3) +
   scale_x_log10() + # Scale the scale values
-  scale_y_log10()
+  scale_y_log10() +
+  labs(
+    x = "Urban Area (km²)",
+    y = "Urban Area Density (km²)",
+    alt = "Scatter plot showing the relationship between city area and density for cities in Brazil, China, India, Indonesia, Japan, and the United States."
+    # Alt Text Created using ASU Image Accesibility tool
+  )
 
 ```
 
