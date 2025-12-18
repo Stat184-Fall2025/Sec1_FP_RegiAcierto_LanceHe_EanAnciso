@@ -25,4 +25,4 @@ This repo will have files at the top level. Additionally, the CodeSpace.R file c
 
 ## Authors
 
-The authors of this repo are Ean Anciso, Lance He, and Regi Acierto. To get in touch with any of the authors, reach out to efa5363@psu.edu, (Lance He), or rja5905@psu.edu.
+The authors of this repo are Ean Anciso, Lance He, and Regi Acierto. To get in touch with any of the authors, reach out to efa5363@psu.edu, yph5389@psu.edu, or rja5905@psu.edu.
