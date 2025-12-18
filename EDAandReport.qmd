@@ -283,6 +283,8 @@ Conclusively, Urban Area appears to be a more robust and comparable measure of a
 #| label: fig-DenbyareaUA
 #| fig-cap: "Urban Area, Density vs Area for Top 6 Countries with amount of large cities"
 #| out-width: "85%"
+#| fig-alt: !expr get_alt_text(get_last_plot())
+
 
 # Main Author: Ean Anciso, Reviewer(s): Lance He, Regi Acierto
 
